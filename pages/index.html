@@ -236,6 +236,14 @@
 </select>
 <p class="err">Choose the number of bathrooms.</p>
 </div>
+<div class="field" data-field="kitchens">
+<label for="kitchens">Kitchens <span class="opt">(optional)</span></label>
+<select id="kitchens" name="kitchens">
+<option value="">Choose</option>
+<option value="0">None</option>
+<option>1</option><option>2</option><option value="3">3 or more</option>
+</select>
+</div>
 </div>
 <div id="otherSize" class="field" data-field="property_size" hidden>
 <label for="property_size">Size of the space</label>
@@ -362,7 +370,7 @@
     window.addEventListener("load", () => document.getElementById("contact").scrollIntoView());
   }
 
-  // Bedrooms/bathrooms for homes; a free-text size for everything else.
+  // Bedrooms/bathrooms/kitchens for homes; a free-text size for everything else.
   function syncSizeFields() {
     const s = service();
     const isHome = !s || HOME_SERVICES.includes(s);
@@ -473,6 +481,7 @@
         address: val("address"),
         bedrooms: isHome ? Number(val("bedrooms")) : null,
         bathrooms: isHome ? Number(val("bathrooms")) : null,
+        kitchens: isHome && val("kitchens") !== "" ? Number(val("kitchens")) : null,
         property_size: isHome ? null : val("property_size"),
         frequency: val("frequency") || null,
         preferred_date: val("preferred_date") || null,
