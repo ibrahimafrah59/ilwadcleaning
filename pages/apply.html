@@ -1,0 +1,365 @@
+<style>
+  /* Job application form (Ilwad brand colours from the logo) */
+  .apply {
+    --ink: #000000;
+    --ink-soft: #4f4c47;
+    --line: #d9d5cf;
+    --paper: #ffffff;
+    --wash: #f7f4ee;
+    --bloom: #ff914d;
+    --bloom-deep: #c25a16;
+    --cream: #efddb1;
+    --cream-soft: #fbf5e8;
+    --error: #b42318;
+    --radius: 10px;
+    color: var(--ink);
+    line-height: 1.55;
+    background: var(--wash);
+  }
+  .apply * { box-sizing: border-box; }
+  .apply .wrap { max-width: 640px; margin: 0 auto; padding: 40px 20px 64px; }
+  .apply .head h1 { font-size: clamp(1.9rem, 6vw, 2.6rem); font-weight: 800; letter-spacing: -0.01em; line-height: 1.08; margin: 0; }
+  .apply .head .bar { height: 6px; width: 96px; background: var(--ink); margin: 14px 0 16px; }
+  .apply .head p { margin: 0; color: var(--ink-soft); max-width: 46ch; }
+  .apply form { margin-top: 28px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 28px 24px; }
+  .apply fieldset { border: 0; padding: 0; margin: 0 0 28px; }
+  .apply legend { font-weight: 700; font-size: 1.1rem; margin-bottom: 14px; padding: 0; }
+  .apply .field { margin-bottom: 16px; }
+  .apply label, .apply .label { display: block; font-weight: 600; font-size: 0.93rem; margin-bottom: 6px; }
+  .apply .opt { font-weight: 400; color: var(--ink-soft); }
+  .apply .hint { font-size: 0.84rem; color: var(--ink-soft); margin: 4px 0 0; }
+  .apply input[type=text], .apply input[type=email], .apply input[type=tel], .apply input[type=date], .apply select, .apply textarea {
+    width: 100%; font: inherit; font-size: 0.97rem; color: inherit;
+    padding: 11px 12px; border: 1.5px solid var(--line); border-radius: 8px; background: var(--paper);
+  }
+  .apply textarea { min-height: 110px; resize: vertical; }
+  .apply input:focus-visible, .apply select:focus-visible, .apply textarea:focus-visible, .apply button:focus-visible, .apply .tile input:focus-visible + span {
+    outline: 2px solid var(--ink); outline-offset: 2px; box-shadow: 0 0 0 5px var(--bloom); border-color: var(--ink);
+  }
+  .apply .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .apply .row { grid-template-columns: 1fr; } }
+  .apply .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  @media (max-width: 420px) { .apply .tiles { grid-template-columns: 1fr; } }
+  .apply .tile { position: relative; cursor: pointer; margin: 0; }
+  .apply .tile input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
+  .apply .tile span {
+    display: flex; align-items: center; gap: 10px; height: 100%;
+    padding: 12px 14px; border: 1.5px solid var(--line); border-radius: 8px; font-weight: 600; font-size: 0.93rem;
+  }
+  .apply .tile span::before {
+    content: ""; flex: none; width: 18px; height: 18px; border-radius: 50%;
+    border: 2px solid var(--line); background: center / 100% no-repeat;
+  }
+  .apply .tile input:checked + span { border-color: var(--ink); background: var(--cream-soft); }
+  .apply .tile input:checked + span::before { border: 0; border-radius: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg fill='%23FF914D'%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(72 10 10)'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(144 10 10)'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(216 10 10)'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(288 10 10)'/%3E%3C/g%3E%3Ccircle cx='10' cy='10' r='2.2' fill='%23EFDDB1'/%3E%3C/svg%3E"); }
+  .apply .tile.multi span::before { border-radius: 4px; }
+  .apply .days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+  .apply .days .tile span { justify-content: center; padding: 10px 0; gap: 0; }
+  .apply .days .tile span::before { display: none; }
+  .apply .days .tile input:checked + span { background: var(--ink); color: #fff; border-color: var(--ink); }
+  @media (max-width: 460px) { .apply .days { grid-template-columns: repeat(4, 1fr); } }
+  .apply .times { display: flex; flex-wrap: wrap; gap: 8px; }
+  .apply .times .tile span { padding: 9px 14px; }
+  .apply .yesno { display: flex; gap: 10px; }
+  .apply .yesno .tile { flex: 1; }
+  .apply .check { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; }
+  .apply .check input { width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--ink); flex: none; }
+  .apply input[type=file] { font: inherit; font-size: 0.9rem; }
+  .apply .err { color: var(--error); font-size: 0.85rem; margin: 6px 0 0; display: none; }
+  .apply .invalid .err { display: block; }
+  .apply .invalid input, .apply .invalid select, .apply .invalid .tiles span { border-color: var(--error); }
+  .apply .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+  .apply button[type=submit] {
+    width: 100%; font: inherit; font-weight: 700; font-size: 1.05rem; letter-spacing: 0.01em;
+    padding: 15px; border: 0; border-radius: 8px; cursor: pointer;
+    background: var(--ink); color: #fff; box-shadow: inset 0 -4px 0 var(--bloom);
+  }
+  .apply button[type=submit]:hover { box-shadow: inset 0 -6px 0 var(--bloom); }
+  .apply button[disabled] { opacity: 0.6; cursor: progress; }
+  .apply .status { margin-top: 14px; font-size: 0.95rem; }
+  .apply .status.error { color: var(--error); }
+  .apply .done { display: none; margin-top: 28px; background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius); padding: 32px 24px; }
+  .apply .done img { width: 40px; height: 40px; margin-bottom: 14px; display: block; }
+  .apply .done h2 { margin: 0 0 8px; font-weight: 800; font-size: 1.6rem; }
+  .apply .done p { margin: 0 0 8px; color: var(--ink-soft); }
+  .apply .done a { color: var(--ink); font-weight: 700; }
+  @media (prefers-reduced-motion: no-preference) {
+    .apply .done.show { animation: rise .35s ease-out; }
+    .apply .done.show img { animation: bloom .6s ease-out; }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+    @keyframes bloom { from { transform: rotate(-72deg) scale(.4); opacity: 0; } to { transform: none; opacity: 1; } }
+  }
+</style>
+<div class="apply">
+<main class="wrap">
+  <header class="head">
+    <h1>Work with Ilwad Cleaning</h1>
+    <div class="bar" aria-hidden="true"></div>
+    <p>We're a local family business hiring reliable cleaners across Toronto and the GTA. This takes about three minutes, and you can apply from your phone.</p>
+  </header>
+
+  <form id="applyForm" novalidate>
+    <fieldset>
+      <legend>About you</legend>
+      <div class="field" data-field="name">
+        <label for="name">Full name</label>
+        <input id="name" name="name" type="text" autocomplete="name" maxlength="120">
+        <p class="err">Enter your name.</p>
+      </div>
+      <div class="row">
+        <div class="field" data-field="phone">
+          <label for="phone">Phone</label>
+          <input id="phone" name="phone" type="tel" autocomplete="tel" maxlength="40">
+          <p class="err">Enter a phone number we can call or text.</p>
+        </div>
+        <div class="field" data-field="email">
+          <label for="email">Email <span class="opt">(optional)</span></label>
+          <input id="email" name="email" type="email" autocomplete="email" maxlength="200">
+          <p class="err">Check the email address, it looks incomplete.</p>
+        </div>
+      </div>
+      <div class="field" data-field="area">
+        <label for="area">Where do you live?</label>
+        <input id="area" name="area" type="text" maxlength="120" placeholder="Neighbourhood or postal code">
+        <p class="hint">This helps us send you to jobs close to home.</p>
+        <p class="err">Enter your neighbourhood or postal code.</p>
+      </div>
+      <div class="field" data-field="can_work">
+        <span class="label" id="workLabel">Are you legally allowed to work in Canada?</span>
+        <div class="yesno" role="radiogroup" aria-labelledby="workLabel">
+          <label class="tile"><input type="radio" name="can_work" value="yes"><span>Yes</span></label>
+          <label class="tile"><input type="radio" name="can_work" value="no"><span>No</span></label>
+        </div>
+        <p class="err">Choose yes or no.</p>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>The work</legend>
+      <div class="field" data-field="work_types">
+        <span class="label" id="typesLabel">What work are you interested in? <span class="opt">(choose any)</span></span>
+        <div class="tiles" role="group" aria-labelledby="typesLabel">
+          <label class="tile multi"><input type="checkbox" name="work_types" value="home"><span>Home cleaning</span></label>
+          <label class="tile multi"><input type="checkbox" name="work_types" value="commercial"><span>Office or commercial</span></label>
+          <label class="tile multi"><input type="checkbox" name="work_types" value="carpet"><span>Carpet and rug cleaning</span></label>
+          <label class="tile multi"><input type="checkbox" name="work_types" value="snow_removal"><span>Snow removal</span></label>
+          <label class="tile multi"><input type="checkbox" name="work_types" value="painting_handyman"><span>Painting and handyman</span></label>
+        </div>
+        <p class="err">Choose at least one type of work.</p>
+      </div>
+
+      <div class="field" data-field="driving">
+        <span class="label" id="driveLabel">Can you drive to jobs?</span>
+        <div class="tiles" role="radiogroup" aria-labelledby="driveLabel">
+          <label class="tile"><input type="radio" name="driving" value="has_car"><span>Yes, I have a car</span></label>
+          <label class="tile"><input type="radio" name="driving" value="licence_no_car"><span>I can drive, but have no car</span></label>
+          <label class="tile"><input type="radio" name="driving" value="no"><span>No, I take transit</span></label>
+        </div>
+        <p class="hint">Not driving is fine. Many of our jobs are close to transit.</p>
+        <p class="err">Choose one option.</p>
+      </div>
+
+      <div class="field" data-field="experience">
+        <label for="experience">Cleaning experience</label>
+        <select id="experience" name="experience">
+          <option value="">Choose</option>
+          <option value="none">None yet, happy to learn</option>
+          <option value="under_1">Less than 1 year</option>
+          <option value="1_3">1 to 3 years</option>
+          <option value="3_plus">More than 3 years</option>
+        </select>
+        <p class="err">Choose your experience level.</p>
+      </div>
+      <div class="field">
+        <label for="experience_notes">Where have you cleaned before? <span class="opt">(optional)</span></label>
+        <textarea id="experience_notes" name="experience_notes" maxlength="2000" placeholder="Homes, offices, hotels, a cleaning company…"></textarea>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>When you can work</legend>
+      <div class="field" data-field="days">
+        <span class="label" id="daysLabel">Days you're available</span>
+        <div class="days" role="group" aria-labelledby="daysLabel">
+          <label class="tile"><input type="checkbox" name="days" value="mon"><span>Mon</span></label>
+          <label class="tile"><input type="checkbox" name="days" value="tue"><span>Tue</span></label>
+          <label class="tile"><input type="checkbox" name="days" value="wed"><span>Wed</span></label>
+          <label class="tile"><input type="checkbox" name="days" value="thu"><span>Thu</span></label>
+          <label class="tile"><input type="checkbox" name="days" value="fri"><span>Fri</span></label>
+          <label class="tile"><input type="checkbox" name="days" value="sat"><span>Sat</span></label>
+          <label class="tile"><input type="checkbox" name="days" value="sun"><span>Sun</span></label>
+        </div>
+        <p class="err">Choose at least one day.</p>
+      </div>
+      <div class="field">
+        <span class="label" id="timesLabel">Times of day <span class="opt">(optional)</span></span>
+        <div class="times" role="group" aria-labelledby="timesLabel">
+          <label class="tile multi"><input type="checkbox" name="times" value="morning"><span>Mornings</span></label>
+          <label class="tile multi"><input type="checkbox" name="times" value="afternoon"><span>Afternoons</span></label>
+          <label class="tile multi"><input type="checkbox" name="times" value="evening"><span>Evenings</span></label>
+        </div>
+        <p class="hint">Office cleaning is usually in the evening.</p>
+      </div>
+      <div class="field">
+        <label for="start_date">Earliest start date <span class="opt">(optional)</span></label>
+        <input id="start_date" name="start_date" type="date">
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Last few things</legend>
+      <div class="field" data-field="resume">
+        <label for="resume">Resume <span class="opt">(optional)</span></label>
+        <input id="resume" name="resume" type="file" accept=".pdf,.doc,.docx,image/jpeg,image/png,image/heic">
+        <p class="hint">PDF, Word or a photo of it. No resume? No problem.</p>
+        <p class="err">Use a PDF, Word file or photo under 10 MB.</p>
+      </div>
+      <div class="field">
+        <label for="why_us">Why would you like to work with us? <span class="opt">(optional)</span></label>
+        <textarea id="why_us" name="why_us" maxlength="2000"></textarea>
+      </div>
+      <div class="field" data-field="consent">
+        <label class="check">
+          <input type="checkbox" id="consent" name="consent">
+          <span>Ilwad Cleaning can contact me by phone, text or email about this application.</span>
+        </label>
+        <p class="err">Check this box so we can contact you.</p>
+      </div>
+
+      <div class="hp" aria-hidden="true">
+        <label for="website">Website</label>
+        <input id="website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+    </fieldset>
+
+    <button type="submit" id="submitBtn">Send my application</button>
+    <p class="status" id="status" role="status" aria-live="polite"></p>
+  </form>
+
+  <div class="done" id="done" tabindex="-1">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cg fill='%23FF914D'%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(72 10 10)'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(144 10 10)'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(216 10 10)'/%3E%3Cellipse cx='10' cy='4.5' rx='3.2' ry='4.3' transform='rotate(288 10 10)'/%3E%3C/g%3E%3Ccircle cx='10' cy='10' r='2.2' fill='%23EFDDB1'/%3E%3C/svg%3E" alt="" aria-hidden="true">
+    <h2>Application sent</h2>
+    <p>Thanks, <span id="doneName"></span>. We read every application and will call or text you if there's a good fit.</p>
+    <p>Questions? Call or text <a href="tel:6479078958">(647) 907-8958</a>.</p>
+  </div>
+</main>
+</div>
+<script>
+(() => {
+  // Ilwad dashboard Supabase project. Public key: visitors can only ADD an application, never read one.
+  const SUPABASE_URL = "https://gatnmfrlnorkxyyzwybg.supabase.co";
+  const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdhdG5tZnJsbm9ya3h5eXp3eWJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTEyMzE4MDUsImV4cCI6MjEwNjgwNzgwNX0.ihEihkoMPxKSa6_o49G0cQI9pmqmXmdDVe2zyeGriI0";
+  const headers = { apikey: SUPABASE_KEY, Authorization: "Bearer " + SUPABASE_KEY };
+
+  const form = document.getElementById("applyForm");
+  const btn = document.getElementById("submitBtn");
+  const statusEl = document.getElementById("status");
+  const val = (id) => document.getElementById(id).value.trim();
+  const checked = (name) => [...form.querySelectorAll(`input[name=${name}]:checked`)].map(i => i.value);
+  const radio = (name) => (form.querySelector(`input[name=${name}]:checked`) || {}).value;
+
+  function mark(field, bad) {
+    const el = form.querySelector(`[data-field="${field}"]`);
+    if (el) el.classList.toggle("invalid", bad);
+    return bad;
+  }
+  form.addEventListener("change", e => { const f = e.target.closest("[data-field]"); if (f) f.classList.remove("invalid"); });
+  form.addEventListener("input",  e => { const f = e.target.closest("[data-field]"); if (f) f.classList.remove("invalid"); });
+
+  const RESUME_TYPES = ["application/pdf","application/msword",
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    "image/jpeg","image/png","image/heic"];
+
+  function validate() {
+    const resume = document.getElementById("resume").files[0];
+    const email = val("email");
+    const bad = [
+      mark("name", !val("name")),
+      mark("phone", val("phone").replace(/\D/g, "").length < 7),
+      mark("email", !!email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)),
+      mark("area", val("area").length < 2),
+      mark("can_work", !radio("can_work")),
+      mark("work_types", checked("work_types").length === 0),
+      mark("driving", !radio("driving")),
+      mark("experience", !val("experience")),
+      mark("days", checked("days").length === 0),
+      mark("resume", !!resume && (resume.size > 10 * 1024 * 1024 ||
+        (resume.type && !RESUME_TYPES.includes(resume.type)))),
+      mark("consent", !document.getElementById("consent").checked),
+    ];
+    const first = form.querySelector(".invalid input, .invalid select");
+    if (first) first.focus();
+    return !bad.some(Boolean);
+  }
+
+  async function uploadResume(file) {
+    const ext = (file.name.split(".").pop() || "pdf").toLowerCase().replace(/[^a-z0-9]/g, "");
+    const path = `${crypto.randomUUID()}.${ext}`;
+    const res = await fetch(`${SUPABASE_URL}/storage/v1/object/resumes/${path}`, {
+      method: "POST",
+      headers: { ...headers, "Content-Type": file.type || "application/octet-stream" },
+      body: file,
+    });
+    if (!res.ok) throw new Error("resume");
+    return path;
+  }
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    statusEl.textContent = ""; statusEl.className = "status";
+    if (document.getElementById("website").value) return;
+    if (!validate()) {
+      statusEl.textContent = "Some details are missing. Check the highlighted fields.";
+      statusEl.className = "status error";
+      return;
+    }
+    btn.disabled = true; btn.textContent = "Sending…";
+
+    try {
+      let resume_path = null;
+      const file = document.getElementById("resume").files[0];
+      if (file) {
+        statusEl.textContent = "Uploading your resume…";
+        try { resume_path = await uploadResume(file); }
+        catch { statusEl.textContent = "Your resume couldn't upload, sending your application without it."; }
+      }
+
+      const row = {
+        name: val("name"),
+        phone: val("phone"),
+        email: val("email") || null,
+        area: val("area"),
+        can_work_in_canada: radio("can_work") === "yes",
+        work_types: checked("work_types"),
+        driving: radio("driving"),
+        experience: val("experience"),
+        experience_notes: val("experience_notes") || null,
+        available_days: checked("days"),
+        available_times: checked("times"),
+        start_date: val("start_date") || null,
+        why_us: val("why_us") || null,
+        resume_path,
+        consent: true,
+      };
+
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/job_applications`, {
+        method: "POST",
+        headers: { ...headers, "Content-Type": "application/json", Prefer: "return=minimal" },
+        body: JSON.stringify(row),
+      });
+      if (!res.ok) throw new Error(await res.text());
+
+      document.getElementById("doneName").textContent = row.name.split(" ")[0];
+      form.hidden = true;
+      const done = document.getElementById("done");
+      done.style.display = "block"; done.classList.add("show"); done.focus();
+      window.scrollTo({ top: 0 });
+    } catch (err) {
+      console.error(err);
+      statusEl.textContent = "Your application didn't go through. Check your connection and select Send my application again.";
+      statusEl.className = "status error";
+      btn.disabled = false; btn.textContent = "Send my application";
+    }
+  });
+})();
+</script>
